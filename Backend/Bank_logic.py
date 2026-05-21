@@ -1,339 +1,224 @@
-#Import Date and Time
+# backend/bank_logic.py
 from datetime import datetime
 
-#Validate account number
+customers = []
+
+
 def validate_account_number(acc_no):
     return acc_no.isdigit() and len(acc_no) == 10
 
-#Validate NIC
+
 def validate_nic(nic):
     return isinstance(nic, str) and len(nic) == 10
 
-#Validate phone number
+
 def validate_phone_number(phone_no):
     return isinstance(phone_no, str) and len(phone_no) == 10
 
-#Validate the first name
+
 def validate_f_name(name):
     return isinstance(name, str) and len(name) <= 10
 
-#Validate the last name
+
 def validate_l_name(name):
     return isinstance(name, str) and len(name) <= 15
 
-#Validate birth date
+
 def validate_birth_date(dob):
     try:
-        datetime.strptime(dob, '%Y-%m-%d')
+        datetime.strptime(dob, "%Y-%m-%d")
         return True
     except ValueError:
         return False
 
-#Validate address
+
 def validate_address(address):
-    return isinstance(address,str) and len(address) <= 15
+    return isinstance(address, str) and len(address) <= 15
 
-#Find customer by account number
-def find_customer_by_account(customers, acc_no):
-    return any(customer['acc_no'] == acc_no for customer in customers)
 
-#Find customer by NIC
-def find_customer_by_nic(customers, nic):
-    return any(customer['nic'] == nic for customer in customers)
+def find_customer_by_account(acc_no):
+    return next((customer for customer in customers if customer["acc_no"] == acc_no), None)
 
-#Display customer details
-def display_customer(customer):
-    print(f"Account Number: {customer['acc_no']}")
-    print(f"NIC: {customer['nic']}")
-    print(f"Name: {customer['f_name']} {customer['l_name']}")
-    print(f"Balance: {customer['balance']}")
 
-#Add a new customer
-def add_customer(customers):
-#Repeates until the condition becomes true
-    while True:
-        acc_no = input("Bank Account Number: ")
-        if validate_account_number(acc_no):
-            if find_customer_by_account(customers, acc_no):
-                print("A customer with this account number already exists. Please try again.")
-            else:
-                break
-        else:
-            print("Invalid account number! Must be 10 digits.")
-#Repeates until the condition becomes true
-    while True:
-        nic = input("NIC: ")
-        if validate_nic(nic):
-            if find_customer_by_nic(customers, nic):
-                print("A customer with this NIC already exists. Please try again.")
-            else:
-                break
-        else:
-            print("Invalid NIC!")
-#Repeates until the condition becomes true
-    while True:
-        f_name = input("First Name: ")
-        if validate_f_name(f_name):
-            break
-        else:
-            print("Invalid first name! Must contain only letters.")
-#Repeates until the condition becomes true
-    while True:
-        l_name = input("Last Name: ")
-        if validate_l_name(l_name):
-            break
-        else:
-            print("Invalid last name! Must contain only letters.")
-#Repeates until the condition becomes true
-    while True:
-        dob = input("Birth Date (YYYY-MM-DD): ")
-        if validate_birth_date(dob):
-            break
-        else:
-            print("Invalid birth date! Must be in the format YYYY-MM-DD.")
-#Repeates until the condition becomes true
-    while True:
-        address = input("Permanent Address: ")
-        if validate_address(address):
-            break
-        else:
-            print("Invalid Address. Maximum length is 15 characters")
-#Repeates until the condition becomes true
-    while True:
-        phone_no = input("Phone Number: ")
-        if validate_phone_number(phone_no):
-            break
-        else:
-            print("Invalid phone number! Must be 10 characters.")
-# Creat a new customer dictionary
+def find_customer_by_nic(nic):
+    return next((customer for customer in customers if customer["nic"] == nic), None)
+
+
+def add_customer(data):
+    acc_no = data.get("acc_no", "")
+    nic = data.get("nic", "")
+    f_name = data.get("f_name", "")
+    l_name = data.get("l_name", "")
+    dob = data.get("dob", "")
+    address = data.get("address", "")
+    phone_no = data.get("phone_no", "")
+
+    if not validate_account_number(acc_no):
+        return {"success": False, "message": "Invalid account number. Must be 10 digits."}
+
+    if find_customer_by_account(acc_no):
+        return {"success": False, "message": "A customer with this account number already exists."}
+
+    if not validate_nic(nic):
+        return {"success": False, "message": "Invalid NIC. Must be 10 characters."}
+
+    if find_customer_by_nic(nic):
+        return {"success": False, "message": "A customer with this NIC already exists."}
+
+    if not validate_f_name(f_name):
+        return {"success": False, "message": "Invalid first name. Maximum 10 characters."}
+
+    if not validate_l_name(l_name):
+        return {"success": False, "message": "Invalid last name. Maximum 15 characters."}
+
+    if not validate_birth_date(dob):
+        return {"success": False, "message": "Invalid birth date. Use YYYY-MM-DD format."}
+
+    if not validate_address(address):
+        return {"success": False, "message": "Invalid address. Maximum 15 characters."}
+
+    if not validate_phone_number(phone_no):
+        return {"success": False, "message": "Invalid phone number. Must be 10 digits."}
+
+    if len(customers) >= 5:
+        return {"success": False, "message": "Customer limit reached."}
+
     new_customer = {
-        'acc_no': acc_no,
-        'nic': nic,
-        'f_name': f_name,
-        'l_name': l_name,
-        'dob': dob,
-        'address': address,
-        'phone_no': phone_no,
-        'balance': 0
+        "acc_no": acc_no,
+        "nic": nic,
+        "f_name": f_name,
+        "l_name": l_name,
+        "dob": dob,
+        "address": address,
+        "phone_no": phone_no,
+        "balance": 0
     }
 
-    save_customer = input("Do you want to save this new customer? (yes/no): ").strip().lower()
-    if save_customer == 'yes':
-        if len(customers) <= 4:
-            customers.append(new_customer)
-            print("Customer added successfully!")
-        else:
-            print("Customer limit reached.")
-    else:
-        print("Customer not saved.")
+    customers.append(new_customer)
 
-#View details of a customer
-def view_customer_details(customers):
-#Loops until the condition becomes true
-    while True:
-        acc_no = input("Enter account number: ")
-        customer = next((customer for customer in customers if customer['acc_no'] == acc_no), None)
-        if customer:
-            display_customer(customer)
-        else:
-            print("Customer not found!")
+    return {
+        "success": True,
+        "message": "Customer added successfully.",
+        "customer": new_customer
+    }
 
-        view_another = input("Do you want to view details of another account? (yes/no): ").strip().lower()
-        if view_another == 'no':
-            break
 
-#View details of all customers
-def view_all_customers(customers):
-    for customer in customers:
-        display_customer(customer)
-#Loops until the condition becomes true
-    while True:
-        update_details = input("Do you want to update any customer details? (yes/no): ").strip().lower()
-        if update_details == 'yes':
-            update_customer_details(customers)
-            break
-        elif update_details == 'no':
-            break
-        else:
-            print("Invalid input! Please enter 'yes' or 'no'.")
+def get_all_customers():
+    return customers
 
-# Deposit money to an account
-def deposit_money(customers):
-#Loops until the condition becomes true
-    while True:
-        acc_no = input("Enter account number: ")
-        customer = next((customer for customer in customers if customer['acc_no'] == acc_no), None)
-        if customer:
-            break
-        else:
-            print("Customer not found! Please try again.")
-#Loops until the condition becomes true
-    while True:
-        try:
-            amount = float(input("Enter amount to deposit: "))
-            if 0 < amount <= 5000000:
-                break
-            elif amount > 5000000:
-                print("Deposit amount exceeds maximum limit of 5,000,000. Please enter a smaller amount.")
-            else:
-                print("Deposit amount must be positive and not exceed 5,000,000!")
-        except ValueError:
-            print("Must be a number!")
 
-    confirm_deposit = input("Do you want to save? (yes/no): ").strip().lower()
-    if confirm_deposit == 'yes':
-        customer['balance'] = customer['balance'] + amount
-        print("Deposit successful!")
-        print(f"New balance: {customer['balance']:.2f}")
-    else:
-        print("Deposit canceled.")
+def get_customer(acc_no):
+    customer = find_customer_by_account(acc_no)
 
-# Withdraw money from an account
-def withdraw_money(customers):
-#Loops until the condition becomes true
-    while True:
-        acc_no = input("Enter account number: ")
-        customer = next((customer for customer in customers if customer['acc_no'] == acc_no), None)
-        if customer:
-            break
-        else:
-            print("Customer not found! Please try again.")
-#Loops until the condition becomes true
-    while True:
-        try:
-            amount = float(input("Enter amount to withdraw: "))
-            if 100 < amount <= 60000:
-                if customer['balance'] >= amount:
-                    break
-                else:
-                    print(f"Insufficient account balance! Your current balance is {customer['balance']:.2f}")
-            elif amount > 60000:
-                print("Withdrawal amount exceeds maximum limit of 60,000. Please enter a smaller amount.")
-            elif amount<100:
-                print("Withdrawal amount must exceed 100.Please enter a higher number.")
-            else:
-                print("Withdrawal amount must be positive and between 100 and 60,000!")
-        except ValueError:
-            print("Must be a number!")
+    if not customer:
+        return {"success": False, "message": "Customer not found."}
 
-    confirm_withdrawal = input("Do you want to save? (yes/no): ").strip().lower()
-    if confirm_withdrawal == 'yes':
-        customer['balance'] -=amount
-        print(f"Withdrawal of {amount:.2f} successful!")
-        print(f"New balance: {customer['balance']:.2f}")
-    else:
-        print("Withdrawal canceled!")
+    return {"success": True, "customer": customer}
 
-# Update customer details
-def update_customer_details(customers):
-#Loops until the condition becomes true
-    while True:
-        acc_no = input("Enter account number: ")
-        customer = next((customer for customer in customers if customer['acc_no'] == acc_no), None)
-        if customer:
-            break
-        else:
-            print("Customer not found! Please try again.")
 
-    nic = f_name = l_name = dob = address = phone_no = None
-#Loops until the condition becomes true    
-    while True:
-        nic_input = input("NIC (Leave blank to keep current): ")
-        if not nic_input:
-            break
-        if validate_nic(nic_input):
-            if nic_input != customer['nic'] and find_customer_by_nic(customers, nic_input):
-                print("A customer with this NIC already exists. Please try again.")
-            else:
-                nic = nic_input
-                break
-        else:
-            print("Invalid NIC!")
-#Loops until the condition becomes true
-    while True:
-        f_name_input = input("First Name (Leave blank to keep current): ")
-        if not f_name_input or validate_f_name(f_name_input):
-            f_name = f_name_input
-            break
-        else:
-            print("Invalid first name! Must contain only letters.")
-#Loops until the condition becomes true
-    while True:
-        l_name_input = input("Last Name (Leave blank to keep current): ")
-        if not l_name_input or validate_l_name(l_name_input):
-            l_name = l_name_input
-            break
-        else:
-            print("Invalid last name! Must contain only letters.")
-#Loops until the condition becomes true
-    while True:
-        dob_input = input("Birth Date (Leave blank to keep current): ")
-        if not dob_input or validate_birth_date(dob_input):
-            dob = dob_input
-            break
-        else:
-            print("Invalid birth date! Must be in the format YYYY-MM-DD.")
-#Loops until the condition becomes true
-    while True:
-        address_input = input("Permanent Address (Leave blank to keep current): ")
-        if not address_input or validate_address(address_input):
-            address = address_input
-            break
-        else:
-            print("Invalid Address. Maximum length is 15 characters")
-#Loops until the condition becomes true
-    while True:
-        phone_no_input = input("Phone Number (Leave blank to keep current): ")
-        if not phone_no_input or validate_phone_number(phone_no_input):
-            phone_no = phone_no_input
-            break
-        else:
-            print("Invalid phone number! Must be 10 digits.")
+def deposit_money(acc_no, amount):
+    customer = find_customer_by_account(acc_no)
 
-    save_info = input("Do you want to save the updated information? (yes/no): ").strip().lower()
-    if save_info == 'yes':
-        if nic is not None: customer['nic'] = nic
-        if f_name is not None: customer['f_name'] = f_name
-        if l_name is not None: customer['l_name'] = l_name
-        if dob is not None: customer['dob'] = dob
-        if address is not None: customer['address'] = address
-        if phone_no is not None: customer['phone_no'] = phone_no
-        print("Customer details updated successfully!")
-    else:
-        print("Changes discarded.")
+    if not customer:
+        return {"success": False, "message": "Customer not found."}
 
-#Main menu
-def main_menu():
-    customers = []
-    while True:
-        print('''
-                       ABC Bank Main Menu
-1) Add a new customer
-2) View details of a customer including his/her bank balance
-3) View details of all the customers with their bank balances
-4) Deposit money to a given account
-5) Withdraw money from a given account
-6) Update Customer Details
-7) Exit
-        ''')
-        choice = input("Your Choice: ")
+    try:
+        amount = float(amount)
+    except ValueError:
+        return {"success": False, "message": "Amount must be a number."}
 
-        if choice == '1':
-            add_customer(customers)
-        elif choice == '2':
-            view_customer_details(customers)
-        elif choice == '3':
-            view_all_customers(customers)
-        elif choice == '4':
-            deposit_money(customers)
-        elif choice == '5':
-            withdraw_money(customers)
-        elif choice == '6':
-            update_customer_details(customers)
-        elif choice == '7':
-            print("Thank you for using ABC Bank Services")
-            break
-        else:
-            print("Invalid choice! Please try again.")
-#Call the main menu
-main_menu()
+    if amount <= 0:
+        return {"success": False, "message": "Deposit amount must be positive."}
+
+    if amount > 5000000:
+        return {"success": False, "message": "Deposit amount exceeds maximum limit of 5,000,000."}
+
+    customer["balance"] += amount
+
+    return {
+        "success": True,
+        "message": "Deposit successful.",
+        "balance": customer["balance"]
+    }
+
+
+def withdraw_money(acc_no, amount):
+    customer = find_customer_by_account(acc_no)
+
+    if not customer:
+        return {"success": False, "message": "Customer not found."}
+
+    try:
+        amount = float(amount)
+    except ValueError:
+        return {"success": False, "message": "Amount must be a number."}
+
+    if amount <= 100:
+        return {"success": False, "message": "Withdrawal amount must exceed 100."}
+
+    if amount > 60000:
+        return {"success": False, "message": "Withdrawal amount exceeds maximum limit of 60,000."}
+
+    if customer["balance"] < amount:
+        return {
+            "success": False,
+            "message": f"Insufficient balance. Current balance is {customer['balance']:.2f}."
+        }
+
+    customer["balance"] -= amount
+
+    return {
+        "success": True,
+        "message": "Withdrawal successful.",
+        "balance": customer["balance"]
+    }
+
+
+def update_customer(acc_no, data):
+    customer = find_customer_by_account(acc_no)
+
+    if not customer:
+        return {"success": False, "message": "Customer not found."}
+
+    if data.get("nic"):
+        new_nic = data["nic"]
+        existing = find_customer_by_nic(new_nic)
+
+        if existing and existing["acc_no"] != acc_no:
+            return {"success": False, "message": "A customer with this NIC already exists."}
+
+        if not validate_nic(new_nic):
+            return {"success": False, "message": "Invalid NIC."}
+
+        customer["nic"] = new_nic
+
+    if data.get("f_name"):
+        if not validate_f_name(data["f_name"]):
+            return {"success": False, "message": "Invalid first name."}
+        customer["f_name"] = data["f_name"]
+
+    if data.get("l_name"):
+        if not validate_l_name(data["l_name"]):
+            return {"success": False, "message": "Invalid last name."}
+        customer["l_name"] = data["l_name"]
+
+    if data.get("dob"):
+        if not validate_birth_date(data["dob"]):
+            return {"success": False, "message": "Invalid birth date."}
+        customer["dob"] = data["dob"]
+
+    if data.get("address"):
+        if not validate_address(data["address"]):
+            return {"success": False, "message": "Invalid address."}
+        customer["address"] = data["address"]
+
+    if data.get("phone_no"):
+        if not validate_phone_number(data["phone_no"]):
+            return {"success": False, "message": "Invalid phone number."}
+        customer["phone_no"] = data["phone_no"]
+
+    return {
+        "success": True,
+        "message": "Customer details updated successfully.",
+        "customer": customer
+    }

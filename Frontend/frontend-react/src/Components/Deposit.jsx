@@ -1,11 +1,11 @@
 import { useState } from "react";
 
-function Deposit({ onDepositDone }) {
+function Deposit({ onDepositSuccess }) {
   const [accNo, setAccNo] = useState("");
   const [amount, setAmount] = useState("");
   const [message, setMessage] = useState("");
 
-  async function handleSubmit(e) {
+  async function handleDeposit(e) {
     e.preventDefault();
 
     const response = await fetch("http://127.0.0.1:5000/deposit", {
@@ -25,7 +25,7 @@ function Deposit({ onDepositDone }) {
     if (result.success) {
       setAccNo("");
       setAmount("");
-      onDepositDone();
+      onDepositSuccess();
     }
   }
 
@@ -33,14 +33,16 @@ function Deposit({ onDepositDone }) {
     <div>
       <h2>Deposit Money</h2>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleDeposit}>
         <input
+          type="text"
           placeholder="Account Number"
           value={accNo}
           onChange={(e) => setAccNo(e.target.value)}
         />
 
         <input
+          type="number"
           placeholder="Amount"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}

@@ -3,6 +3,7 @@ import AddCustomer from "./Components/AddCustomer";
 import Deposit from "./Components/Deposit";
 import Withdraw from "./Components/Withdraw";
 import UpdateCustomer from "./Components/UpdateCustomer";
+import SearchCustomer from "./Components/SearchCustomer";
 
 function App() {
   const [customers, setCustomers] = useState([]);
@@ -27,6 +28,7 @@ function App() {
       <Deposit onDepositSuccess={fetchCustomers} />
       <Withdraw onWithdrawSuccess={fetchCustomers} />
       <UpdateCustomer onUpdateSuccess={fetchCustomers} />
+      <SearchCustomer />
 
       <h2>Customers</h2>
 

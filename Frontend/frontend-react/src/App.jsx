@@ -4,17 +4,23 @@ import AddCustomer from "./Components/AddCustomer";
 function App() {
   const [customers, setCustomers] = useState([]);
 
-  useEffect(() => {
+  function fetchCustomers() {
     fetch("http://127.0.0.1:5000/customers")
       .then((response) => response.json())
       .then((data) => setCustomers(data))
       .catch((error) => console.error("Error:", error));
+  }
+
+  useEffect(() => {
+    fetchCustomers();
   }, []);
 
   return (
     <div style={{ padding: "30px", fontFamily: "Arial" }}>
       <h1>ABC Bank Management System</h1>
       <p>React frontend is connected to Python backend.</p>
+
+      <AddCustomer onCustomerAdded={fetchCustomers} />
 
       <h2>Customers</h2>
 

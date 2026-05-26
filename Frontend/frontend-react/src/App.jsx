@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import AddCustomer from "./Components/AddCustomer";
 
 function App() {
   const [customers, setCustomers] = useState([]);

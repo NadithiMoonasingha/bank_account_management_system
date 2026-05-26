@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import AddCustomer from "./Components/AddCustomer";
 import Deposit from "./Components/Deposit";
+import Withdraw from "./Components/Withdraw";
 
 function App() {
   const [customers, setCustomers] = useState([]);
@@ -23,6 +24,7 @@ function App() {
 
       <AddCustomer onCustomerAdded={fetchCustomers} />
       <Deposit onDepositSuccess={fetchCustomers} />
+      <Withdraw onWithdrawSuccess={fetchCustomers} />
 
       <h2>Customers</h2>
 

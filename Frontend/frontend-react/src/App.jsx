@@ -31,14 +31,33 @@ function App() {
       {customers.length === 0 ? (
         <p>No customers added yet.</p>
       ) : (
-        <ul>
+        <div>
           {customers.map((customer) => (
-            <li key={customer.acc_no}>
-              {customer.f_name} {customer.l_name} - Balance: Rs.{" "}
-              {customer.balance}
-            </li>
+            <div
+              key={customer.acc_no}
+              style={{
+                border: "1px solid #ccc",
+                borderRadius: "8px",
+                padding: "15px",
+                marginBottom: "15px",
+                backgroundColor: "white",
+                width: "400px",
+              }}
+            >
+              <h3>
+                {customer.f_name} {customer.l_name}
+              </h3>
+
+              <p><strong>Account Number:</strong> {customer.acc_no}</p>
+              <p><strong>NIC:</strong> {customer.nic}</p>
+              <p><strong>Full Name:</strong> {customer.f_name} {customer.l_name}</p>
+              <p><strong>Date of Birth:</strong> {customer.dob}</p>
+              <p><strong>Address:</strong> {customer.address}</p>
+              <p><strong>Phone Number:</strong> {customer.phone_no}</p>
+              <p><strong>Balance:</strong> Rs. {customer.balance}</p>
+            </div>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );

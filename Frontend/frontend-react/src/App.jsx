@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import AddCustomer from "./Components/AddCustomer";
+import Deposit from "./Components/Deposit";
 
 function App() {
   const [customers, setCustomers] = useState([]);
@@ -21,6 +22,7 @@ function App() {
       <p>React frontend is connected to Python backend.</p>
 
       <AddCustomer onCustomerAdded={fetchCustomers} />
+      <Deposit onDepositSuccess={fetchCustomers} />
 
       <h2>Customers</h2>
 

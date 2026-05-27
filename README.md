@@ -44,7 +44,7 @@ The system supports adding customers, viewing customer details, depositing money
 
 The dashboard displays the main system title, total number of customers, total account balance, and system status.
 
-![Dashboard Overview](screenshots/dashboard.png)
+![Dashboard Overview](Screenshots/dashboard.png)
 
 ### Banking Forms
 

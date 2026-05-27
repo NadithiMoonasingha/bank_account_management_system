@@ -1,7 +1,24 @@
 # backend/bank_logic.py
 from datetime import datetime
+import json
+import os
 
-customers = []
+DATA_FILE = "customers.json"
+
+# Loads existing customers from the JSON file when the backend starts
+def load_customers():
+    if os.path.exists(DATA_FILE):
+        with open(DATA_FILE, "r") as file:
+            return json.load(file)
+    return []
+
+
+def save_customers():
+    with open(DATA_FILE, "w") as file:
+        json.dump(customers, file, indent=4)
+
+
+customers = load_customers()
 
 
 def validate_account_number(acc_no):
@@ -95,6 +112,7 @@ def add_customer(data):
     }
 
     customers.append(new_customer)
+    save_customers()
 
     return {
         "success": True,
@@ -134,13 +152,13 @@ def deposit_money(acc_no, amount):
         return {"success": False, "message": "Deposit amount exceeds maximum limit of 5,000,000."}
 
     customer["balance"] += amount
+    save_customers()
 
     return {
         "success": True,
         "message": "Deposit successful.",
         "balance": customer["balance"]
     }
-
 
 def withdraw_money(acc_no, amount):
     customer = find_customer_by_account(acc_no)
@@ -166,6 +184,7 @@ def withdraw_money(acc_no, amount):
         }
 
     customer["balance"] -= amount
+    save_customers()
 
     return {
         "success": True,
@@ -217,6 +236,8 @@ def update_customer(acc_no, data):
             return {"success": False, "message": "Invalid phone number."}
         customer["phone_no"] = data["phone_no"]
 
+    save_customers()
+    
     return {
         "success": True,
         "message": "Customer details updated successfully.",

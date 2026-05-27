@@ -1,0 +1,12 @@
+[
+    {
+        "acc_no": "1234567890",
+        "nic": "1234567890",
+        "f_name": "Theo",
+        "l_name": "Bennet",
+        "dob": "1998-08-22",
+        "address": "Jaffna",
+        "phone_no": "1234567890",
+        "balance": 693000.0
+    }
+]

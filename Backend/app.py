@@ -8,7 +8,8 @@ from bank_logic import (
     get_customer,
     deposit_money,
     withdraw_money,
-    update_customer
+    update_customer,
+    delete_customer
 )
 
 app = Flask(__name__)
@@ -47,6 +48,10 @@ def withdraw():
 def update(acc_no):
     data = request.json
     return jsonify(update_customer(acc_no, data))
+
+@app.route("/customers/<acc_no>", methods=["DELETE"])
+def delete(acc_no):
+    return jsonify(delete_customer(acc_no))
 
 
 if __name__ == "__main__":

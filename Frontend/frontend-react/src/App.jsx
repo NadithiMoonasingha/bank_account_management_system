@@ -4,6 +4,7 @@ import Deposit from "./Components/Deposit";
 import Withdraw from "./Components/Withdraw";
 import UpdateCustomer from "./Components/UpdateCustomer";
 import SearchCustomer from "./Components/SearchCustomer";
+import DeleteCustomer from "./Components/DeleteCustomer";
 
 function App() {
   const [customers, setCustomers] = useState([]);
@@ -72,6 +73,10 @@ function App() {
 
         <div className="dashboard-card">
           <SearchCustomer />
+        </div>
+
+        <div className="dashboard-card">
+          <DeleteCustomer onDeleteSuccess={fetchCustomers} />
         </div>
       </section>
 

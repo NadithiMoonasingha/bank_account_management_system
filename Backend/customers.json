@@ -1,12 +1,12 @@
 [
     {
-        "acc_no": "1234567890",
-        "nic": "1234567890",
-        "f_name": "Theo",
-        "l_name": "Bennet",
-        "dob": "1998-08-22",
-        "address": "Jaffna",
-        "phone_no": "1234567890",
-        "balance": 693000.0
+        "acc_no": "1212121212",
+        "nic": "0987654321",
+        "f_name": "Amber",
+        "l_name": "Green",
+        "dob": "1998-08-01",
+        "address": "Gampaha",
+        "phone_no": "1234567899",
+        "balance": 5000000.0
     }
 ]

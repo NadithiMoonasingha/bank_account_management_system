@@ -237,9 +237,26 @@ def update_customer(acc_no, data):
         customer["phone_no"] = data["phone_no"]
 
     save_customers()
-    
+
     return {
         "success": True,
         "message": "Customer details updated successfully.",
         "customer": customer
+    }
+
+def delete_customer(acc_no):
+    customer = find_customer_by_account(acc_no)
+
+    if not customer:
+        return {
+            "success": False,
+            "message": "Customer not found."
+        }
+
+    customers.remove(customer)
+    save_customers()
+
+    return {
+        "success": True,
+        "message": "Customer deleted successfully."
     }

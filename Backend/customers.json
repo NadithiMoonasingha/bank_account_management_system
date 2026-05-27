@@ -1,12 +1,22 @@
 [
     {
-        "acc_no": "1212121212",
-        "nic": "0987654321",
+        "acc_no": "1345678530",
+        "nic": "1998098765",
         "f_name": "Amber",
-        "l_name": "Green",
-        "dob": "1998-08-01",
+        "l_name": "Grance",
+        "dob": "1998-12-02",
         "address": "Gampaha",
-        "phone_no": "1234567899",
-        "balance": 5000000.0
+        "phone_no": "0721937486",
+        "balance": 49000.0
+    },
+    {
+        "acc_no": "1234098765",
+        "nic": "1243658709",
+        "f_name": "Heather",
+        "l_name": "Black",
+        "dob": "2000-07-20",
+        "address": "Trincomalee",
+        "phone_no": "0771342574",
+        "balance": 0
     }
 ]
